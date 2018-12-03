@@ -12,13 +12,13 @@ data class AddressEntity(
         @GenericGenerator(
                 name = "UUID",
                 strategy = "org.hibernate.id.UUIDGenerator")
-        @Column(name = "id, updatable = false, nullable = false")
+        @Column(name = "id", updatable = false, nullable = false)
         val id: String? = "",
         val street: String,
         val neighborhood: String,
         val city: String,
         val state: String,
-        val number: Int,
+        val addressNumber: Int,
         val complement: String?,
         val zipCode: String) {
 

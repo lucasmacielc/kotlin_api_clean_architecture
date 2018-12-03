@@ -9,7 +9,7 @@ fun AddressEntity.toAddress() =
                 neighborhood = this.neighborhood,
                 city = this.city,
                 state = this.state,
-                number = this.number,
+                number = this.addressNumber,
                 complement = this.complement,
                 zipCode = this.zipCode
         )
@@ -20,7 +20,7 @@ fun Address.toAddressEntity() =
                 neighborhood = this.neighborhood!!,
                 city = this.city!!,
                 state = this.state!!,
-                number = this.number!!,
+                addressNumber = this.number!!,
                 complement = this.complement,
                 zipCode = this.zipCode!!
         )

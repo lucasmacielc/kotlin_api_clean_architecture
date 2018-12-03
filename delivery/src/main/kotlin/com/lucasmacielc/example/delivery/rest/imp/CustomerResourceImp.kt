@@ -10,6 +10,7 @@ import com.lucasmacielc.example.usecases.core.customer.GetCustomerByIdUseCase
 import com.lucasmacielc.example.usecases.core.customer.ListCustomersUseCase
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.RequestBody
 import java.util.concurrent.CompletionStage
 
 class CustomerResourceImp(private val useCaseExecutor: UseCaseExecutor,
@@ -22,12 +23,11 @@ class CustomerResourceImp(private val useCaseExecutor: UseCaseExecutor,
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun createCustomer(customerDto: CustomerDto) =
-            useCaseExecutor(
-                    useCase = createCustomerUseCase,
-                    requestDto = customerDto,
-                    requestConverter = { it.toCustomer() },
-                    responseConverter = { ResponseEntity<Unit>(HttpStatus.CREATED) })
+    override fun createCustomer(@RequestBody customerDto: CustomerDto) = useCaseExecutor(
+            useCase = createCustomerUseCase,
+            requestDto = customerDto,
+            requestConverter = { it.toCustomer() },
+            responseConverter = { ResponseEntity<Unit>(HttpStatus.CREATED) })
 
     override fun updateCustomer(customerDto: CustomerDto): CompletionStage<ResponseEntity<Unit>> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
