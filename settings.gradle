@@ -1,0 +1,3 @@
+rootProject.name = 'example'
+
+include ':delivery', ':entities', ':data',':data_db', ':usecases'

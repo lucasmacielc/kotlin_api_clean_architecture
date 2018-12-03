@@ -1,0 +1,36 @@
+buildscript {
+	ext {
+		kotlinVersion = '1.3.0'
+		springBootVersion = '2.0.6.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
+		classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
+		classpath("org.jetbrains.kotlin:kotlin-noarg:${kotlinVersion}")
+	}
+}
+
+allprojects {
+	ext {
+		group = 'com.lucasmacielc'
+		version = '0.0.1-SNAPSHOT'
+		sourceCompatibility = 1.8
+	}
+	repositories {
+		google()
+		mavenCentral()
+		jcenter()
+	}
+}
+
+task clean(type: Delete) {
+	delete rootProject.buildDir
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '2.0'
+}
