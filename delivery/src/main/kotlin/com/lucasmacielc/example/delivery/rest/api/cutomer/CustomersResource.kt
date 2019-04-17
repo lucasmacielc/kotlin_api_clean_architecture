@@ -9,20 +9,21 @@ import java.util.concurrent.CompletionStage
 @RequestMapping("/customers")
 interface CustomersResource {
 
-    @GetMapping("/{id}", produces = ["application/json"], consumes = ["application/json"])
-    fun getCustomerById(@PathVariable("id") id: String): CompletionStage<CustomerDto>
+    @GetMapping("/{value}", produces = ["application/json"], consumes = ["application/json"])
+    fun getCustomerById(@PathVariable("value") id: String): CompletionStage<CustomerDto>
 
     @PostMapping(
             produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE],
             consumes = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE])
     fun createCustomer(@RequestBody customerDto: CustomerDto): CompletionStage<ResponseEntity<Unit>>
 
-    @PutMapping(produces = ["application/json"], consumes = ["application/json"])
-    fun updateCustomer(@RequestBody customerDto: CustomerDto): CompletionStage<ResponseEntity<Unit>>
+    @PutMapping("/{value}", produces = ["application/json"], consumes = ["application/json"])
+    fun updateCustomer(@PathVariable("value") id: String,
+                       @RequestBody customerDto: CustomerDto): CompletionStage<ResponseEntity<Unit>>
 
     @GetMapping(produces = ["application/json"], consumes = ["application/json"])
     fun listCustomers(): CompletionStage<List<CustomerDto>>
 
-    @DeleteMapping("/{id}")
-    fun deleteCustomer(@PathVariable("id") id: String): CompletionStage<ResponseEntity<Unit>>
+    @DeleteMapping("/{value}")
+    fun deleteCustomer(@PathVariable("value") id: String): CompletionStage<ResponseEntity<Unit>>
 }

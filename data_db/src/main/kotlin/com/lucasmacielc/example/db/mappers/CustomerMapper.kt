@@ -14,9 +14,7 @@ fun CustomerEntity.toCustomer() =
                 document = this.document,
                 phone = this.phone,
                 email = this.email,
-                notes = this.notes,
-                address = this.address?.toAddress()
-        )
+                notes = this.notes)
 
 fun Customer.toCustomerEntity() =
         CustomerEntity(
@@ -26,6 +24,5 @@ fun Customer.toCustomerEntity() =
                 document = this.document,
                 phone = this.phone,
                 email = this.email!!,
-                notes = this.notes,
-                address = this.address?.toAddressEntity()
+                notes = this.notes
         )

@@ -5,14 +5,14 @@ import org.hibernate.annotations.GenericGenerator
 import javax.persistence.*
 
 @Entity
-@Table(name = "customer_address")
+@Table(name = "address")
 data class AddressEntity(
         @Id
         @GeneratedValue(generator = "UUID")
         @GenericGenerator(
                 name = "UUID",
                 strategy = "org.hibernate.id.UUIDGenerator")
-        @Column(name = "id", updatable = false, nullable = false)
+        @Column(name = "value", updatable = false, nullable = false)
         val id: String? = "",
         val street: String,
         val neighborhood: String,
@@ -21,9 +21,6 @@ data class AddressEntity(
         val addressNumber: Int,
         val complement: String?,
         val zipCode: String) {
-
-    @OneToOne(mappedBy = "address")
-    val customer: CustomerEntity? = null
 
     @Column
     @CreationTimestamp

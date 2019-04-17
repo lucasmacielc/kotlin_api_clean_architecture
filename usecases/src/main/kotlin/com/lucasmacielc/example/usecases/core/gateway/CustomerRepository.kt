@@ -1,6 +1,7 @@
 package com.lucasmacielc.example.usecases.core.gateway
 
 import com.lucasmacielc.example.entities.Customer
+import com.lucasmacielc.example.entities.CustomerId
 
 interface CustomerRepository {
 
@@ -8,9 +9,9 @@ interface CustomerRepository {
 
     fun existsCustomerId(customerId: String): Boolean
 
-    fun getCustomerById(id: String): Customer?
+    fun getCustomerByCustomerCode(customerId: CustomerId): Customer?
 
-    fun deleteCustomerById(customerId: String)
+    fun deleteCustomerByCustomerId(customerId: CustomerId)
 
-    fun getAllCustomers(): List<Customer?>?
+    fun getAllCustomers(): List<Customer>?
 }

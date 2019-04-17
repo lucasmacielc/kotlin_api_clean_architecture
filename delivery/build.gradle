@@ -27,6 +27,7 @@ ext {
 
 dependencies {
 	implementation project(':data_db')
+	implementation project(':usecases')
 	implementation('org.springframework.boot:spring-boot-starter-data-rest')
 	implementation('com.fasterxml.jackson.module:jackson-module-kotlin')
 	implementation('org.springframework.cloud:spring-cloud-starter-oauth2')

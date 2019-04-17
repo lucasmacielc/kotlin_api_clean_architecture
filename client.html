@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Cadastro de cliente</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    </head>
+
+    <body>
+        <h2>Cadastro de cliente</h2>
+        
+        <form id="customerform">
+            <label for="id">Id</label><br /> 
+            <input name="id" type="text" placeholder="Insira o id do cliente para editar"/> <br /> <br /> 
+
+            <label for="name">Nome</label><br /> 
+            <input name="name" type="text" placeholder="Insira o nome do cliente"/> <br /> <br /> 
+
+            <label for="email">E-mail</label><br /> 
+            <input name="email" type="text" placeholder="Insira o e-mail do cliente"/> <br /> <br /> 
+
+            <label for="notes">Observações</label><br /> 
+            <textarea name="notes" cols="30" rows="2">Insira as observações sobre o usuário</textarea><br /> <br /> 
+
+            <button type="submit">Salvar</button>
+        </form> <br />
+
+        <button id="buttonList">Listar clientes</button><br />
+
+        <label for="id">Id</label><br />
+        <input id="customerId" name="id" type="text" placeholder="Insira o id do cliente"/> 
+        <button id="buttonDelete">Excluir cliente</button>
+        <button id="buttonFindById">Buscar cliente pelo id</button>
+
+        <script>
+                let url = "http://localhost:8080/"
+                $('#customerform').submit(function(event){
+                    event.preventDefault()
+                    var id = $("input[name=id]").val();
+                    $.ajax({
+                        url: (url + (id ? "customers/" + id: "customers/")),
+                        type: (id ? "PUT" : "POST"),
+                        data: $(this).serialize(),
+                        dataType: 'json',
+                        success: function(data){
+                            console.log("Salvou o cliente");
+                        }, error: function(data){
+                            console.log("erro");
+                        }
+                    });
+                });
+                $('#buttonDelete').click(function(){
+                    var id = $("#customerId").val();
+                        $.ajax({
+                            url: (url + "customers/" + id),
+                            type: "DELETE",
+                            dataType: "json",
+                            success: function(data){
+                                console.log("Excluiu o cliente");
+                            }, error: function(data){
+                                console.log("Erro");
+                            }
+                        });
+                });
+
+                $('#buttonList').click(function(){
+                        $.getJSON({
+                            url: (url + "customers/") ,
+                            type: "GET",
+                            success: function(data){
+                                console.log("Lista de cliente");
+                                console.log(data);
+                            }, error: function(data){
+                                console.log("Erro");
+                            }
+                        });
+                });
+
+                $('#buttonFindById').click(function(){
+                    var id = $("#customerId").val();
+                        $.ajax({
+                            url: (url + "customers/" + id),
+                            type: "GET",
+                            dataType: "json",
+                            success: function(data){
+                                console.log("Buscou o cliente");
+                                console.log(data);
+                            }, error: function(data){
+                                console.log("Erro");
+                            }
+                        });
+                });
+
+
+            </script>
+    </body>
+</html>

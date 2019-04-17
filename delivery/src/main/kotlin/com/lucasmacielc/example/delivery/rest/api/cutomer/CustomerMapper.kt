@@ -12,8 +12,7 @@ fun Customer.toCustomerDto() =
                 document = this.document,
                 phone = this.phone,
                 email = this.email,
-                notes = this.notes,
-                address = this.address?.toAddressDto()
+                notes = this.notes
         )
 
 fun CustomerDto.toCustomer() =
@@ -24,6 +23,5 @@ fun CustomerDto.toCustomer() =
                 document = this.document,
                 phone = this.phone,
                 email = this.email,
-                notes = this.notes,
-                address = this.address?.toAddress()
+                notes = this.notes
         )

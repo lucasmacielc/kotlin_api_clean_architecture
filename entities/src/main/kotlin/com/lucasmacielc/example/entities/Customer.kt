@@ -8,5 +8,6 @@ data class Customer(val id: String?,
                     val document: String?,
                     val phone: String?,
                     val email: String?,
-                    val notes: String?,
-                    val address: Address?)
+                    val notes: String?)
+
+data class CustomerId(val value: String)

@@ -12,17 +12,14 @@ data class CustomerEntity(
         @GenericGenerator(
                 name = "UUID",
                 strategy = "org.hibernate.id.UUIDGenerator")
-        @Column(name = "id", updatable = false, nullable = false)
+        @Column(name = "value", updatable = false, nullable = false)
         val id: String?,
         val name: String,
         val dateOfBirthday: Long?,
         val document: String?,
         val phone: String?,
         val email: String,
-        val notes: String?,
-        @OneToOne(cascade = [CascadeType.ALL])
-        @JoinColumn(name = "customer_address_id")
-        val address: AddressEntity?) {
+        val notes: String?) {
 
     @Column
     @CreationTimestamp
