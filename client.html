@@ -1,96 +1,232 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Cadastro de cliente</title>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    </head>
 
-    <body>
+<head>
+  <title>Cadastro de cliente</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500" rel="stylesheet">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      font-size: 14px;
+      color: #333;
+      width: 800px;
+      margin: 25px auto;
+    }
+
+    button,
+    input,
+    textarea {
+      display: block;
+      padding: 9px;
+      border-radius: 4px;
+    }
+
+    input,
+    textarea {
+      margin-bottom: 20px;
+      border: 1px solid #cacacd;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    label {
+      font-weight: 500;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    button {
+      font-weight: 500;
+      color: #fff;
+      margin: 10px 0;
+      width: 100%;
+      cursor: pointer;
+    }
+
+    button:focus,
+    input:focus,
+    textarea:focus {
+      outline: 0 !important;
+      border-color: #2684ff !important;
+      box-shadow: 0 0 0 2px #2684ff !important;
+      transition: box-shadow 0.12s !important;
+    }
+
+    h2 {
+      margin: 0 0 25px;
+    }
+
+    .main {
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .list-container {
+      margin-left: 100px;
+    }
+
+    .search-container {
+      margin: 40px 0 0;
+    }
+
+    .save {
+      background-color: #4ca64c;
+      border-color: #4ca64c;
+    }
+
+    .delete {
+      background-color: #ff4c4c;
+      border-color: #ff4c4c;
+    }
+
+    .search {
+      background-color: #4c4cff;
+      border-color: #4c4cff;
+    }
+  </style>
+</head>
+
+<body>
+
+  <section class="main">
+    <div>
+      <div>
         <h2>Cadastro de cliente</h2>
-        
+
         <form id="customerform">
-            <label for="id">Id</label><br /> 
-            <input name="id" type="text" placeholder="Insira o id do cliente para editar"/> <br /> <br /> 
+          <label for="id">Id</label>
+          <input name="id" type="text" placeholder="Insira o id do cliente para editar" />
 
-            <label for="name">Nome</label><br /> 
-            <input name="name" type="text" placeholder="Insira o nome do cliente"/> <br /> <br /> 
+          <label for="name">Nome</label>
+          <input name="name" type="text" placeholder="Insira o nome do cliente" />
 
-            <label for="email">E-mail</label><br /> 
-            <input name="email" type="text" placeholder="Insira o e-mail do cliente"/> <br /> <br /> 
+          <label for="email">Email</label>
+          <input name="email" type="text" placeholder="Insira o e-mail do cliente" />
 
-            <label for="notes">Observações</label><br /> 
-            <textarea name="notes" cols="30" rows="2">Insira as observações sobre o usuário</textarea><br /> <br /> 
+          <label for="notes">Observações</label>
+          <textarea name="notes" cols="30" rows="2" placeholder="Insira as observações sobre o usuário"></textarea>
 
-            <button type="submit">Salvar</button>
-        </form> <br />
+          <button type="submit" class="save">Salvar</button>
+        </form>
+      </div>
 
-        <button id="buttonList">Listar clientes</button><br />
+      <div class="search-container">
+        <h2>Busca/remove cliente por id</h2>
 
-        <label for="id">Id</label><br />
-        <input id="customerId" name="id" type="text" placeholder="Insira o id do cliente"/> 
-        <button id="buttonDelete">Excluir cliente</button>
-        <button id="buttonFindById">Buscar cliente pelo id</button>
+        <label for="id">Id</label>
+        <input id="customerId" name="id" type="text" placeholder="Insira o id do cliente" />
 
-        <script>
-                let url = "http://localhost:8080/"
-                $('#customerform').submit(function(event){
-                    event.preventDefault()
-                    var id = $("input[name=id]").val();
-                    $.ajax({
-                        url: (url + (id ? "customers/" + id: "customers/")),
-                        type: (id ? "PUT" : "POST"),
-                        data: $(this).serialize(),
-                        dataType: 'json',
-                        success: function(data){
-                            console.log("Salvou o cliente");
-                        }, error: function(data){
-                            console.log("erro");
-                        }
-                    });
-                });
-                $('#buttonDelete').click(function(){
-                    var id = $("#customerId").val();
-                        $.ajax({
-                            url: (url + "customers/" + id),
-                            type: "DELETE",
-                            dataType: "json",
-                            success: function(data){
-                                console.log("Excluiu o cliente");
-                            }, error: function(data){
-                                console.log("Erro");
-                            }
-                        });
-                });
+        <button id="buttonFindById" class="search">Buscar cliente pelo id</button>
+        <button id="buttonDelete" class="delete">Excluir cliente</button>
+      </div>
+    </div>
 
-                $('#buttonList').click(function(){
-                        $.getJSON({
-                            url: (url + "customers/") ,
-                            type: "GET",
-                            success: function(data){
-                                console.log("Lista de cliente");
-                                console.log(data);
-                            }, error: function(data){
-                                console.log("Erro");
-                            }
-                        });
-                });
+    <div class="list-container">
+      <h2>Lista de clientes</h2>
 
-                $('#buttonFindById').click(function(){
-                    var id = $("#customerId").val();
-                        $.ajax({
-                            url: (url + "customers/" + id),
-                            type: "GET",
-                            dataType: "json",
-                            success: function(data){
-                                console.log("Buscou o cliente");
-                                console.log(data);
-                            }, error: function(data){
-                                console.log("Erro");
-                            }
-                        });
-                });
+      <div id="table-root"></div>
+    </div>
+  </section>
 
+  <script>
+    const url = "http://localhost:8080/"
+    const messageError = 'Algo de errado acontenceu, tenta novamente mais tarde'
 
-            </script>
-    </body>
+    const node = document.createElement("p")
+    $(node).attr("id", "main-text")
+    $(node).text("Carregando...")
+
+    getById("table-root").append(node)
+
+    function getById(id) {
+      return $('#' + id)
+    }
+
+    function renderTable(list) {
+      $.each(list, function (i) {
+        const templateString = '<table class="table card"><thead> <tr><td><p>Id: ' + list[i].id +
+          '</p><p>Nome: ' + list[i].name + '</p><p>Email: ' + list[i].email + '</p><p>Observações: ' +
+          list[i]
+          .notes +
+          '</p></td></tr></thead></table>'
+
+        $('#table-root').append(templateString)
+      })
+    }
+
+    function listUsers() {
+      $.getJSON({
+        url: (url + "customers/"),
+        type: "GET",
+        success: function (data) {
+          getById('main-text').remove()
+          renderTable(data)
+        },
+        error: function (data) {
+          getById('main-text').innerText = messageError
+        }
+      })
+    }
+
+    $('#customerform').submit(function (event) {
+      event.preventDefault()
+
+      var id = $("input[name=id]").val()
+
+      $.ajax({
+        url: (url + (id ? "customers/" + id : "customers/")),
+        type: (id ? "PUT" : "POST"),
+        data: $(this).serialize(),
+        dataType: 'json',
+        success: function (data) {
+          listUsers()
+        },
+        error: function (data) {
+          alert(messageError)
+        }
+      })
+    })
+
+    $('#buttonDelete').click(function () {
+      var id = $("#customerId").val()
+
+      $.ajax({
+        url: (url + "customers/" + id),
+        type: "DELETE",
+        dataType: "json",
+        success: function (data) {
+          listUsers()
+        },
+        error: function (data) {
+          alert(messageError)
+        }
+      })
+    })
+
+    $('#buttonFindById').click(function () {
+      var id = $("#customerId").val()
+
+      $.ajax({
+        url: (url + "customers/" + id),
+        type: "GET",
+        dataType: "json",
+        success: function (data) {
+          renderTable([data])
+        },
+        error: function (data) {
+          alert(messageError)
+        }
+      })
+    })
+
+    listUsers()
+  </script>
+</body>
+
 </html>
