@@ -1,117 +1,265 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Cadastro de cliente</title>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    </head>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Cadastro de cliente</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500" rel="stylesheet">
 
-    <body>
-        <h2>Cadastro de cliente</h2>
-        
-        <form id="customerform">
-            <label for="id">Id</label><br /> 
-            <input name="id" type="text" placeholder="Insira o id do cliente para editar"/> <br /> <br /> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 
-            <label for="name">Nome</label><br /> 
-            <input name="name" type="text" placeholder="Insira o nome do cliente"/> <br /> <br /> 
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+            color: #333;
+            width: 800px;
+            margin: 25px auto;
+        }
 
-            <label for="email">E-mail</label><br /> 
-            <input name="email" type="text" placeholder="Insira o e-mail do cliente"/> <br /> <br /> 
+        button,
+        input,
+        textarea {
+            display: block;
+            padding: 9px;
+            border-radius: 4px;
+        }
 
-            <label for="notes">Observações</label><br /> 
-            <textarea name="notes" cols="30" rows="2"></textarea><br /> <br />
+        input,
+        textarea {
+            margin-bottom: 20px;
+            border: 1px solid #cacacd;
+        }
 
-            <button type="submit">Salvar</button>
-        </form> <br />
+        textarea {
+            resize: vertical;
+        }
 
-        <button id="buttonList">Listar clientes</button><br />
+        label {
+            font-weight: 500;
+            display: block;
+            margin-bottom: 6px;
+        }
 
-        <label for="id">Id</label><br />
-        <input id="customerId" name="id" type="text" placeholder="Insira o id do cliente"/> 
-        <button id="buttonDelete">Excluir cliente</button>
-        <button id="buttonFindById">Buscar cliente pelo id</button>
+        button {
+            font-weight: 500;
+            color: #fff;
+            margin: 10px 0;
+            width: 100%;
+            cursor: pointer;
+        }
 
-        <script>
-                let url = "http://localhost:8080/";
-                $('#customerform').submit(function(event){
-                    event.preventDefault();
-                    var id = $("input[name=id]").val();
-                    var form = $(this);
-                    var data = form.serializeArray();
-                    $.ajax({
-                        url: (url + (id ? "customers/" + id: "customers/")),
-                        type: (id ? "PUT" : "POST"),
-                        data: JSON.stringify(getFormData(data)),
-                        contentType: "application/json",
-                        dataType: 'json',
-                        statusCode: {
-                            201: function() {
-                                console.log("Criou o cliente");
-                            }
-                        },
-                        success: function() {
-                            console.log("Salvou o cliente");
-                        }
-                    });
-                });
+        button:focus,
+        input:focus,
+        textarea:focus {
+            outline: 0 !important;
+            border-color: #2684ff !important;
+            box-shadow: 0 0 0 2px #2684ff !important;
+            transition: box-shadow 0.12s !important;
+        }
 
-                function getFormData(data) {
-                    var unindexed_array = data;
-                    var indexed_array = {};
+        h2 {
+            margin: 0 0 25px;
+        }
 
-                    $.map(unindexed_array, function(n, i) {
-                        indexed_array[n['name']] = n['value'];
-                    });
+        .main {
+            display: flex;
+            align-items: flex-start;
+        }
 
-                    return indexed_array;
+        .list-container {
+            margin-left: 100px;
+        }
+
+        .search-container {
+            margin: 40px 0 0;
+        }
+
+        .save {
+            background-color: #4ca64c;
+            border-color: #4ca64c;
+        }
+
+        .delete {
+            background-color: #ff4c4c;
+            border-color: #ff4c4c;
+        }
+
+        .search {
+            background-color: #4c4cff;
+            border-color: #4c4cff;
+        }
+    </style>
+</head>
+
+<body>
+
+<section class="main">
+    <div>
+        <div>
+            <h2>Cadastro de cliente</h2>
+
+            <form id="customerform">
+                <label for="id">Id</label>
+                <input name="id" type="text" placeholder="Insira o id do cliente para editar"/>
+
+                <label for="name">Nome</label>
+                <input name="name" type="text" placeholder="Insira o nome do cliente"/>
+
+                <label for="email">Email</label>
+                <input name="email" type="text" placeholder="Insira o e-mail do cliente"/>
+
+                <label for="notes">Observações</label>
+                <textarea name="notes" cols="30" rows="2"
+                          placeholder="Insira as observações sobre o usuário"></textarea>
+
+                <button type="submit" class="save">Salvar</button>
+            </form>
+        </div>
+
+        <div class="search-container">
+            <h2>Busca/remove cliente por id</h2>
+
+            <label for="id">Id</label>
+            <input id="customerId" name="id" type="text" placeholder="Insira o id do cliente"/>
+
+            <button id="buttonFindById" class="search">Buscar cliente pelo id</button>
+            <button id="buttonDelete" class="delete">Excluir cliente</button>
+        </div>
+    </div>
+
+    <div class="list-container">
+        <h2>Lista de clientes</h2>
+
+        <div id="table-root">
+
+            <table id="list_customer">
+                <thead>
+                <th align="center" valign="middle">Id</th>
+                <th calign="center" valign="middle">Nome</th>
+                <th align="center" valign="middle">E-mail</th>
+                <th align="center" valign="middle">Observações</th>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</section>
+
+<script>
+    const url = "http://localhost:8080/"
+    const messageError = 'Algo de errado acontenceu, tenta novamente mais tarde'
+
+    const node = document.createElement("p")
+    $(node).attr("id", "main-text")
+    $(node).text("Carregando...")
+
+    getById("table-root").append(node)
+
+    function getById(id) {
+        return $('#' + id)
+    }
+
+    function renderTable(list) {
+        const tableRef = document.getElementById('list_customer').getElementsByTagName('tbody')[0];
+        $("#list_customer tbody tr").remove();
+        $.each(list, function (i) {
+            const templateString = '<td  align="center" valign="middle"><p>' + list[i].id + '</p></td>' +
+                '<td align="center" valign="middle"><p>' + list[i].name + '</p></td>' +
+                '<td  align="center" valign="middle"><p>' + list[i].email + '</p></td>' +
+                '<td align="center" valign="middle"><p>' + list[i].notes + '</p></td>'
+
+            const newRow = tableRef.insertRow(tableRef.rows.length);
+            newRow.innerHTML = templateString;
+        })
+    }
+
+    function listUsers() {
+        $.ajax({
+            url: (url + "customers/"),
+            type: "GET",
+            contentType: "application/json",
+            success: function (data) {
+                getById('main-text').remove()
+                renderTable(data)
+            },
+            error: function (data) {
+                getById('main-text').innerText = messageError
+            }
+        })
+    }
+
+    $('#customerform').submit(function (event) {
+        event.preventDefault()
+
+        var id = $("input[name=id]").val()
+
+        $.ajax({
+            url: (url + (id ? "customers/" + id : "customers/")),
+            type: (id ? "PUT" : "POST"),
+            data: JSON.stringify(getFormData($(this).serializeArray())),
+            contentType: "application/json",
+            dataType: 'json',
+            complete: function (xhr) {
+                if (xhr.readyState == 4) {
+                    if (xhr.status == 201) {
+                        listUsers()
+                    }
+                } else {
+                    alert(messageError);
                 }
+            }
+        })
+    })
 
-                $('#buttonDelete').click(function(){
-                    var id = $("#customerId").val();
-                        $.ajax({
-                            url: (url + "customers/" + id),
-                            type: "DELETE",
-                            dataType: "json",
-                            success: function(data){
-                                console.log("Excluiu o cliente");
-                            }, error: function(data){
-                                console.log("Erro");
-                            }
-                        });
-                });
+    function getFormData(unindexed_array) {
+        let indexed_array = {};
 
-                $('#buttonList').click(function(){
-                        $.ajax({
-                            url: (url + "customers/") ,
-                            type: "GET",
-                            contentType: "application/json",
-                            success: function(data){
-                                console.log("Lista de cliente");
-                                console.log(data);
-                            }, error: function(data){
-                                console.log("Erro");
-                            }
-                        });
-                });
+        $.map(unindexed_array, function (n, i) {
+            indexed_array[n['name']] = n['value'];
+        });
 
-                $('#buttonFindById').click(function(){
-                    var id = $("#customerId").val();
-                        $.ajax({
-                            url: (url + "customers/" + id),
-                            type: "GET",
-                            dataType: "json",
-                            contentType: "application/json",
-                            success: function(data){
-                                console.log("Buscou o cliente");
-                                console.log(data);
-                            }, error: function(data){
-                                console.log("Erro");
-                            }
-                        });
-                });
+        return indexed_array;
+    }
 
 
-            </script>
-    </body>
+    $('#buttonDelete').click(function () {
+        var id = $("#customerId").val()
+
+        $.ajax({
+            url: (url + "customers/" + id),
+            type: "DELETE",
+            dataType: "text",
+            contentType: "application/json",
+            success: function () {
+                listUsers()
+            },
+            error: function (data) {
+                alert(messageError)
+            }
+        })
+    })
+
+    $('#buttonFindById').click(function () {
+        var id = $("#customerId").val()
+
+        $.ajax({
+            url: (url + "customers/" + id),
+            type: "GET",
+            dataType: "json",
+            contentType: "application/json",
+            success: function (data) {
+                renderTable([data])
+            },
+            error: function (data) {
+                alert(messageError)
+            }
+        })
+    })
+
+    listUsers()
+</script>
+</body>
+
 </html>
